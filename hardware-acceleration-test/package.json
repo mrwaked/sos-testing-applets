@@ -1,0 +1,42 @@
+{
+  "name": "@kral/hardware-acceleration-test",
+  "version": "1.0.0",
+  "main": "dist/index.html",
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "upload": "sos applet upload",
+    "clean": "npx rimraf dist",
+    "escheck": "es-check --module es5 dist/*.js",
+    "postbuild": "npm run escheck",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production && npm run escheck",
+    "connect": "webpack --watch"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "description": "signageOS applet",
+  "repository": {},
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@babel/core": "^7.26.7",
+    "@babel/preset-env": "^7.26.7",
+    "@signageos/front-applet": "6.8.0-jk-hardware-acceleration.2011",
+    "@signageos/front-display": "^14.10.0",
+    "@signageos/webpack-plugin": "^1.0.5",
+    "babel-loader": "^8.4.1",
+    "css-loader": "^6.11.0",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.15.2"
+  },
+  "sos": {
+    "appletUid": "88ec344dfbd51d5f8028475a3f05ed78bee2cc30cd51702088",
+    "appletVersion": "1.0.0"
+  }
+}

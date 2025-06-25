@@ -1,0 +1,56 @@
+{
+  "name": "@kral/extended-management-test",
+  "version": "1.0.0",
+  "main": "dist/index.html",
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "upload": "sos applet upload",
+    "clean": "npx rimraf dist",
+    "escheck": "npx es-check --module es5 dist/**/*.js",
+    "postbuild": "npm run escheck",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "connect": "echo \"Deprecated command \"npm run connect\". Use \"npm run watch\" instead.\" && npm run watch",
+    "watch": "webpack --watch"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "description": "signageOS applet",
+  "repository": {},
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
+    "@signageos/front-applet": "^8.0.3",
+    "@signageos/front-display": "^14.19.1",
+    "@signageos/webpack-plugin": "^1.0.9",
+    "babel-loader": "^8.4.1",
+    "core-js": "^3.42.0",
+    "css-loader": "^6.11.0",
+    "es-check": "^8.0.2",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.15.2"
+  },
+  "sos": {
+    "appletUid": "619d53e77a6b400191e650f03883b6917cbe335d271af23c06",
+    "appletVersion": "1.0.0",
+    "config": [
+      {
+        "name": "server_url",
+        "valueType": "string",
+        "description": "URL to set",
+        "placeholder": "https://tvojemama.cz",
+        "mandatory": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "wifi-connect-test",
+  "version": "0.0.1",
+  "main": "dist/index.html",
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "upload": "sos applet upload",
+    "clean": "npx rimraf dist",
+    "escheck": "npx es-check --module es5 dist/**/*.js",
+    "postbuild": "npm run escheck",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "connect": "echo \"Deprecated command \"npm run connect\". Use \"npm run watch\" instead.\" && npm run watch",
+    "watch": "webpack --watch"
+  },
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "description": "signageOS applet",
+  "repository": {},
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
+    "@signageos/front-applet": "8.1.0-jk-update-js-api.2212",
+    "@signageos/front-display": "^14.21.0",
+    "@signageos/webpack-plugin": "^1.0.9",
+    "babel-loader": "^8.4.1",
+    "core-js": "^3.43.0",
+    "css-loader": "^6.11.0",
+    "es-check": "^8.0.2",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.15.2"
+  },
+  "sos": {
+    "appletUid": "9b1bfbb33428853e3c73a7278c7faa640f98972383ac712980",
+    "appletVersion": "0.0.1",
+    "config": [
+      {
+        "name": "wifiName",
+        "valueType": "string",
+        "description": "Wi-Fi network name",
+        "placeholder": "signageos.io",
+        "mandatory": true
+      },
+      {
+        "name": "wifiPassword",
+        "valueType": "string",
+        "description": "For WebOS and open network use '', for Tizen do not pass this parameter",
+        "placeholder": "********",
+        "mandatory": false
+      },
+      {
+        "name": "wifiEncryption",
+        "valueType": "string",
+        "description": "Encryption type - OPEN | WEP | WPA2 | WPA2_WPA_MIXED | WPA3 | 802.1X_EAP",
+        "placeholder": "WPA2_WPA_MIXED",
+        "mandatory": true
+      }
+    ]
+  }
+}
