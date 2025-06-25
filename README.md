@@ -1,7 +1,6 @@
 # signageOS Testing Applets
 
-This repository contains various applets for testing the signageOS platform. Each applet is designed to demonstrate specific features or functionalities of the signageOS system.
+This repository contains various applets for testing the signageOS Core Apps. Each applet is designed to demonstrate specific features or functionalities of the signageOS system.
 
-:::note
-This applets are intended for testing purposes only and may not be suitable for production use.
-:::
+> [!WARNING]
+> These applets are intended for testing purposes only, and they are not suitable for production use.
