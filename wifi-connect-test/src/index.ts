@@ -2,19 +2,30 @@ import './index.css';
 import sos from '@signageos/front-applet';
 import { WifiEncryptionType } from "@signageos/front-applet/es6/FrontApplet/Management/Wifi/IWifi";
 import { INetworkInterface } from "@signageos/front-applet/es6/FrontApplet/Management/Network/INetworkInfo";
+import { WifiEvent } from "@signageos/front-applet/es6/FrontApplet/Management/Wifi/IWifiEvent";
 
 // Wait on sos data are ready (https://docs.signageos.io/api/js/content/latest/js-applet-basics#onready)
 sos.onReady().then(async function () {
 	const contentElement = document.getElementById('root')!;
 
+	sos.management.wifi.on(WifiEvent.CLIENT_CONNECTED, () => {
+		contentElement.innerHTML += '<p>[EVENT] Connected to Wi-Fi successfully!</p>';
+	});
+	sos.management.wifi.on(WifiEvent.CLIENT_DISCONNECTED, () => {
+		contentElement.innerHTML += '<p>[EVENT] Disconnected from Wi-Fi.</p>';
+	});
+	sos.management.wifi.on(WifiEvent.CLIENT_CONNECT_REJECTED, () => {
+		contentElement.innerHTML += '<p>[EVENT] Failed to connect to Wi-Fi.</p>';
+	});
+
 	const activeInterfaces = await sos.management.network.listInterfaces();
 	if (activeInterfaces.length > 0) {
-		contentElement.innerHTML = '<h3>Active network interfaces:</h3>';
+		contentElement.innerHTML += '<h3>Active network interfaces:</h3>';
 		activeInterfaces.forEach((iface: INetworkInterface) => {
 			contentElement.innerHTML += `<p>${iface.name} (${iface.type}) - IP: ${iface.localAddress} / ${iface.macAddress}</p>`;
 		});
 	} else {
-		contentElement.innerHTML = '<p>No active network interfaces found.</p>';
+		contentElement.innerHTML += '<p>No active network interfaces found.</p>';
 	}
 
 	if (activeInterfaces.some(iface => iface.type === 'wifi' && iface.wifiSsid)) {

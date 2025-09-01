@@ -1,6 +1,6 @@
 {
   "name": "wifi-connect-test",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.html",
   "scripts": {
     "prepare": "npm run clean && npm run build",
@@ -15,6 +15,7 @@
   },
   "files": [
     "README.md",
+    "CHANGELOG.md",
     "dist"
   ],
   "description": "signageOS applet",
