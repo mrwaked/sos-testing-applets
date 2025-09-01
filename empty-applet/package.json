@@ -23,7 +23,7 @@
     "@babel/core": "^7.27.4",
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-typescript": "^7.27.1",
-    "@signageos/front-applet": "8.1.0-jk-update-js-api.2222",
+    "@signageos/front-applet": "8.2.1-jk-fix-get-name.2348",
     "@signageos/front-display": "^14.21.0",
     "@signageos/webpack-plugin": "^1.0.9",
     "babel-loader": "^8.4.1",
