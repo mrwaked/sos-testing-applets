@@ -1,0 +1,76 @@
+{
+  "name": "@kral/wifi-import-certificates",
+  "version": "1.0.0",
+  "main": "dist/index.html",
+  "scripts": {
+    "prepare": "echo Skibidi",
+    "upload": "sos applet upload",
+    "clean": "npx rimraf dist",
+    "escheck": "npx es-check --module es5 dist/**/*.js",
+    "postbuild": "npm run escheck",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "connect": "echo \"Deprecated command \"npm run connect\". Use \"npm run watch\" instead.\" && npm run watch",
+    "watch": "webpack --watch"
+  },
+  "files": [
+    "dist"
+  ],
+  "description": "signageOS applet for importing WiFi certificates",
+  "repository": {},
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
+    "@signageos/front-applet": "8.5.3-jk-fix-import-certs.2572",
+    "@signageos/front-display": "^14.21.0",
+    "@signageos/webpack-plugin": "^1.0.9",
+    "babel-loader": "^8.4.1",
+    "core-js": "^3.43.0",
+    "css-loader": "^6.11.0",
+    "es-check": "^8.0.2",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.15.2"
+  },
+  "sos": {
+    "appletUid": "25c4f8cb905bd958979596a2791e21811d10f514062f08daa2",
+    "appletVersion": "1.0.0",
+    "config": [
+      {
+        "name": "authType",
+        "valueType": "string",
+        "description": "Authentication type for WiFi - TTLS, PEAP or TLS",
+        "placeholder": "PEAP",
+        "mandatory": true
+      },
+      {
+        "name": "caCertificate",
+        "valueType": "string",
+        "description": "CA certificate in PEM format (required for TTLS, PEAP and TLS)",
+        "placeholder": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+        "mandatory": false
+      },
+      {
+        "name": "clientCertificate",
+        "valueType": "string",
+        "description": "Client certificate in PEM format (required for TLS)",
+        "placeholder": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
+        "mandatory": false
+      },
+      {
+        "name": "clientKey",
+        "valueType": "string",
+        "description": "Client key in PEM format (required for TLS)",
+        "placeholder": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+        "mandatory": false
+      }
+    ]
+  }
+}
