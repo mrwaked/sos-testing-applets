@@ -1,0 +1,70 @@
+{
+  "name": "proxy-setup",
+  "version": "1.0.0",
+  "author": "",
+  "main": "dist/index.html",
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "upload": "sos applet upload",
+    "clean": "npx rimraf dist",
+    "escheck": "npx es-check@9.4.0 --module es5 \"./dist/**/*.js\"",
+    "postbuild": "npm run escheck",
+    "start": "rspack serve",
+    "build": "npm run check-types && rspack build",
+    "check-types": "tsc --noEmit"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "description": "Applet for setting up manual proxy on device via signageOS JS API",
+  "repository": {},
+  "license": "UNLICENSED",
+  "sos": {
+    "config": [
+      {
+        "name": "uri",
+        "valueType": "string",
+        "description": "Proxy server address",
+        "placeholder": "178.62.193.192",
+        "mandatory": true
+      },
+      {
+        "name": "port",
+        "valueType": "string",
+        "description": "Proxy server port",
+        "placeholder": "1080",
+        "mandatory": true
+      },
+      {
+        "name": "username",
+        "valueType": "string",
+        "description": "Proxy authentication username",
+        "mandatory": false
+      },
+      {
+        "name": "password",
+        "valueType": "string",
+        "description": "Proxy authentication password",
+        "mandatory": false
+      }
+    ]
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1.4.11",
+    "@rspack/core": "^1.4.11",
+    "@signageos/front-applet": "^8.8.0",
+    "@signageos/front-display": "^14.41.1",
+    "@signageos/webpack-plugin": "^1.1.1",
+    "core-js": "^3.50.0",
+    "css-loader": "^7.1.4",
+    "es-check": "^9.4.0",
+    "style-loader": "^4.0.0",
+    "typescript": "^5.9.3"
+  },
+  "sos": {
+    "appletUid": "ecd8e9de6982ff52215020b2a85ea87e393d",
+    "appletVersion": "1.0.0"
+  }
+}
