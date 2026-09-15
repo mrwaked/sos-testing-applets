@@ -6,6 +6,7 @@ sos.onReady().then(async function () {
 	const contentElement = document.getElementById('root');
 	if (contentElement) {
 		console.log('sOS is ready');
+		console.log(sos);
 		contentElement.innerHTML = 'sOS is ready';
 	}
 });
