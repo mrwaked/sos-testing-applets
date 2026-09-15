@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>01-01 Native Video + HTML Overlay</title>
+	<style>
+        /* THE critical rule: the graphics plane must be transparent so the
+           native hardware video plane (which sits BELOW it) shows through.
+           If you paint an opaque background here, it hides the video. */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background: transparent !important;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+        }
+
+        /* Everything below is the OVERLAY — plain HTML on top of the video. */
+
+        #status {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 6px 14px;
+            border-radius: 16px;
+            white-space: nowrap;
+        }
+
+        #clock {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        #clock .live {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: #e10600;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        /* Bottom strip of price tags — the "dynamic content" overlay. */
+        #tags {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            padding: 0 32px 32px;
+            box-sizing: border-box;
+        }
+
+        .tag {
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            border-radius: 14px;
+            padding: 16px 22px;
+            min-width: 180px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .tag .name {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .tag .price {
+            font-size: 40px;
+            font-weight: 800;
+            color: #ffd400;
+            margin-top: 4px;
+        }
+
+        .tag .was {
+            font-size: 16px;
+            color: #bbb;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Overlay elements. These render on the HTML graphics plane, which is
+     composited ON TOP of the native video plane. -->
+<div id="clock"><span class="live">LIVE</span><span id="time">--:--:--</span></div>
+<div id="status">... loading ...</div>
+
+<div id="tags">
+	<div class="tag"><div class="name">Espresso</div><div class="price">$2.40 <span class="was">$3.00</span></div></div>
+	<div class="tag"><div class="name">Croissant</div><div class="price">$1.90 <span class="was">$2.50</span></div></div>
+	<div class="tag"><div class="name">Cappuccino</div><div class="price">$3.20 <span class="was">$3.80</span></div></div>
+	<div class="tag"><div class="name">Muffin</div><div class="price">$2.10 <span class="was">$2.60</span></div></div>
+</div>
+
+<script type="application/ecmascript">
+	window.addEventListener('sos.loaded', async function () {
+
+		// ── Swap this for your own 4K asset. The play region below is always
+		//    full-screen, so a 3840x2160 source fills the display. This linux
+		//    is a known-good signageOS test asset (downloads & plays on XD1036).
+		const VIDEO_URI = 'https://static.signageos.io/assets/test-videos-03_AME/video-test-03_15s_1920x1080_2fe7b039750a134aeac1c0a515710007.mp4';
+		const VIDEO_UID = 'overlay-demo-video.mp4';
+
+		const statusEl = document.getElementById('status');
+		const timeEl = document.getElementById('time');
+
+		await sos.onReady(); // Wait until the signageOS app is loaded and ready
+
+		// Show what we're running on (proves which model/FW the demo passed on).
+		try {
+			const fw = await sos.management.firmware.getVersion();
+			const pl = await sos.management.app.getType();
+			const model = await sos.management.getModel();
+			statusEl.innerHTML = pl + ' · ' + model + ' · FW ' + fw + ' · native video + HTML overlay';
+		} catch (e) {
+			console.log(e);
+		}
+
+		// Live clock — dynamic HTML updating once a second OVER the video,
+		// proving the graphics plane stays interactive/animated on top.
+		setInterval(function () {
+			const d = new Date();
+			const p = function (n) { return String(n).padStart(2, '0'); };
+			timeEl.textContent = p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+		}, 250);
+
+		// Cache the video to offline storage so playback is local & reliable
+		// (https://docs.signageos.io/api/js/js-offline-cache-media-files).
+		const { filePath } = await sos.offline.cache.loadOrSaveFile(VIDEO_UID, VIDEO_URI);
+
+		// Full-screen destination rectangle, in graphics-plane coordinates.
+		const rect = [filePath, 0, 0, window.innerWidth, window.innerHeight];
+
+		// THE key option for overlays on BrightSign. The signageOS player has two
+		// video layers: a "foreground" wrapper (above the applet — the DEFAULT,
+		// which renders video ON TOP of HTML, hiding any overlay) and a
+		// "background" wrapper (behind the applet, so HTML composites on top).
+		//
+		// Per the docs, `background` is a PREPARE option — the layer is chosen at
+		// prepare() time; play() then shows the already-prepared video in it.
+		// https://developers.signageos.io/sdk/sos/video
+		while (true) {
+			await sos.video.prepare(...rect, { background: true });
+			await sos.video.play(...rect);
+			await sos.video.onceEnded(...rect); // resolves when the clip finishes
+		}
+	});
+</script>
+</body>
+
+</html>
