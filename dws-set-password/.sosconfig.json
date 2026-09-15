@@ -1,0 +1,25 @@
+{
+	"name": "dws-set-password",
+	"version": "1.0.0",
+	"description": "Brekeke",
+	"dangerLevel": "critical",
+	"platforms": {
+		"brightsign": {
+			"rootDir": "brightsign",
+			"mainFile": "index.js",
+			"runtime": "browser"
+		}
+	},
+	"configDefinition": [
+		{
+			"name": "playerPassword",
+			"valueType": "string",
+			"mandatory": true,
+			"description": "What password to set"
+		}
+	],
+	"sos": {
+		"@signageos/front-applet": "8.8.0"
+	},
+	"uid": "542463885e390de22b9b6ee61c31dbd5fbb2"
+}
