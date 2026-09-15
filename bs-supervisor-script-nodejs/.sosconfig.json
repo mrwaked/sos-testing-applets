@@ -1,0 +1,22 @@
+{
+	"name": "bs-supervisor-script-nodejs",
+	"version": "1.0.3",
+	"description": "",
+	"dangerLevel": "low",
+	"platforms": {
+		"brightsign": {
+			"rootDir": "brightsign",
+			"mainFile": "setBrightness.js",
+			"runtime": "nodejs"
+		}
+	},
+	"configDefinition": [
+		{
+			"name": "targetVolume",
+			"valueType": "number",
+			"mandatory": true,
+			"description": "Value"
+		}
+	],
+	"uid": "2a7b61b5ad5c6308e76673d3a7ad03e3fb37"
+}

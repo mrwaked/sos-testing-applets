@@ -1,0 +1,22 @@
+{
+	"name": "bs-supervisor-script",
+	"version": "1.1.0",
+	"description": "",
+	"dangerLevel": "low",
+	"platforms": {
+		"brightsign": {
+			"rootDir": "brightsign",
+			"mainFile": "setBrightness.sh",
+			"runtime": "sh"
+		}
+	},
+	"configDefinition": [
+		{
+			"name": "brightness",
+			"valueType": "number",
+			"mandatory": true,
+			"description": "The brightness level to set"
+		}
+	],
+	"uid": "cb06acb1b9ae48415bcf3e46ffe640d802a8"
+}
