@@ -1,0 +1,22 @@
+{
+	"name": "linux-bash-test",
+	"version": "1.1.0",
+	"description": "",
+	"dangerLevel": "low",
+	"platforms": {
+		"linux": {
+			"rootDir": "linux",
+			"mainFile": "setBrightness.sh",
+			"runtime": "bash"
+		}
+	},
+	"configDefinition": [
+		{
+			"name": "brightness",
+			"valueType": "number",
+			"mandatory": true,
+			"description": "The brightness level to set"
+		}
+	],
+	"uid": "cc74dde8beaabcdfbe25ec6b68c29cd23a0a"
+}

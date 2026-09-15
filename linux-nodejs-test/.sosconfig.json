@@ -1,0 +1,15 @@
+{
+	"name": "linux-nodejs-test",
+	"version": "1.1.0",
+	"description": "",
+	"dangerLevel": "low",
+	"platforms": {
+		"linux": {
+			"rootDir": "linux",
+			"mainFile": "index.js",
+			"runtime": "nodejs"
+		}
+	},
+	"configDefinition": [],
+	"uid": "76cd48c4d1bd82bdef3909d13b0e88285108"
+}
