@@ -1,0 +1,173 @@
+* {
+	box-sizing: border-box;
+}
+
+/*
+ * The page background MUST be transparent: on BrightSign the HTML graphics plane
+ * is composited with an alpha channel, and a background video (background=true)
+ * only shows through where the page has transparent pixels. An opaque body
+ * background would hide the video everywhere, even when layering is correct.
+ */
+html,
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	font-family: Arial, Helvetica, sans-serif;
+	overflow: hidden;
+}
+
+/* ── Top band: title + mode + expectation (opaque, no video behind it) ── */
+#header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 12vh;
+	/* extra right padding reserves space for the top-right device badge */
+	padding: 1vh 17vw 1vh 2vw;
+	background: #101426;
+	color: #ffffff;
+	border-bottom: 2px solid #33ddff;
+	overflow: hidden;
+}
+
+/* Top-right device badge — opaque so it's legible in screenshots over anything. */
+#device-badge {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 20;
+	padding: 1vh 1.4vw;
+	text-align: right;
+	background: rgba(16, 20, 38, 0.95);
+	border-left: 2px solid #33ddff;
+	border-bottom: 2px solid #33ddff;
+	border-bottom-left-radius: 8px;
+	font-family: monospace;
+	line-height: 1.3;
+}
+
+#device-badge .db-model {
+	font-size: 2.4vh;
+	font-weight: bold;
+	color: #7cfc98;
+}
+
+#device-badge .db-fw {
+	font-size: 2vh;
+	color: #99ffee;
+}
+
+#device-badge .db-label {
+	color: #ffd54a;
+}
+
+#title {
+	font-size: 3.2vh;
+	font-weight: bold;
+	letter-spacing: 0.04em;
+}
+
+#mode-line {
+	font-size: 2.6vh;
+	color: #ffd54a;
+	margin-top: 0.4vh;
+}
+
+#expectation-line {
+	font-size: 2vh;
+	color: #99ffee;
+	margin-top: 0.3vh;
+}
+
+/* ── Video overlays: positioned by JS to match the exact video rectangles ── */
+.video-overlay {
+	position: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* Slight dark tint so a background video is visibly dimmed (proves the video
+	   is actually behind), while the label card below stays fully opaque. */
+	background: rgba(0, 0, 0, 0.25);
+	border: 4px dashed rgba(255, 255, 255, 0.6);
+}
+
+.video-label {
+	background: #0a0f1f;
+	border: 3px solid #33ddff;
+	border-radius: 10px;
+	padding: 2vh 2vw;
+	text-align: center;
+	color: #ffffff;
+	box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.video-name {
+	font-size: 4vh;
+	font-weight: bold;
+}
+
+.video-hint {
+	font-size: 1.8vh;
+	color: #ffd54a;
+	margin-top: 0.6vh;
+}
+
+.video-state {
+	font-size: 2.2vh;
+	color: #7cfc98;
+	margin-top: 0.8vh;
+	font-family: monospace;
+}
+
+/* ── Bottom band: scrolling log (opaque, no video behind it) ── */
+#log-band {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 33vh;
+	background: #0a0d18;
+	color: #cceeff;
+	border-top: 2px solid #33ddff;
+	display: flex;
+	flex-direction: column;
+}
+
+#log-header {
+	flex: 0 0 auto;
+	font-size: 1.7vh;
+	font-weight: bold;
+	color: #99ffee;
+	padding: 0.6vh 1vw;
+	border-bottom: 1px solid #223344;
+}
+
+#log {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	padding: 0.4vh 1vw;
+	font-family: monospace;
+	font-size: 1.6vh;
+	line-height: 1.35;
+}
+
+.log-line {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.log-ok {
+	color: #7cfc98;
+}
+
+.log-warn {
+	color: #ffd54a;
+}
+
+.log-err {
+	color: #ff7b7b;
+}

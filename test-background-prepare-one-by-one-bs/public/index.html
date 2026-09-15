@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="theme-color" content="#000000" />
+	<title>test-background-prepare-one-by-one-bs</title>
+</head>
+<body>
+	<!--
+		Reproduces REAL one-by-one (sequential) playback to test whether background:true
+		survives across a playlist on a single-player device.
+		Three bands so the native video plane never hides the status UI:
+		  #header   (top, opaque)    — current strategy + current video + expected layering
+		  #overlay  (middle)         — the ONE video region; the card inside should stay ON TOP iff background held
+		  #log-band (bottom, opaque) — scrolling log mirrored from console ([bg-1by1])
+	-->
+	<div id="header">
+		<div id="title">BACKGROUND — ONE-BY-ONE (SEQUENTIAL) TEST</div>
+		<div id="strategy-line">initializing…</div>
+		<div id="expectation-line"></div>
+	</div>
+
+	<!-- Top-right device badge so model + firmware are captured in every screenshot. -->
+	<div id="device-badge">
+		<div class="db-model"><span class="db-label">MODEL </span><span id="db-model-val">loading…</span></div>
+		<div class="db-fw"><span class="db-label">FW </span><span id="db-fw-val">loading…</span></div>
+	</div>
+
+	<div class="video-overlay" id="overlay">
+		<div class="video-label">
+			<div class="video-name" id="video-name">—</div>
+			<div class="video-hint">BACKGROUND OVERLAY — should be ON TOP while background holds</div>
+			<div class="video-state" id="video-state">—</div>
+		</div>
+	</div>
+
+	<div id="log-band">
+		<div id="log-header">LOG — newest at bottom (also in browser/CDP console as [bg-1by1])</div>
+		<div id="log"></div>
+	</div>
+</body>
+</html>

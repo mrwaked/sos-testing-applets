@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="theme-color" content="#000000" />
+	<title>test-background-prepare-bs</title>
+</head>
+<body>
+	<!--
+		Layout = three bands so the native video plane never covers the status UI:
+		  #header   (top, opaque)    — title + current mode + expected layering
+		  video band (middle)        — #overlay-1 / #overlay-2 sit exactly over the two videos
+		  #log-band (bottom, opaque) — scrolling log mirrored from console
+		The header/log bands have NO video behind them, so they stay readable in every mode.
+		The two overlay boxes are positioned by JS to match the exact video rectangles.
+	-->
+	<div id="header">
+		<div id="title">BACKGROUND VIDEO LAYERING TEST</div>
+		<div id="mode-line">initializing…</div>
+		<div id="expectation-line"></div>
+	</div>
+
+	<!-- Device badge, top-right, so model + firmware are captured in every screenshot. -->
+	<div id="device-badge">
+		<div class="db-model"><span class="db-label">MODEL </span><span id="db-model-val">loading…</span></div>
+		<div class="db-fw"><span class="db-label">FW </span><span id="db-fw-val">loading…</span></div>
+	</div>
+
+	<div class="video-overlay" id="overlay-1">
+		<div class="video-label">
+			<div class="video-name">VIDEO 1</div>
+			<div class="video-hint">this HTML box should be ON TOP when background=true</div>
+			<div class="video-state" id="state-1">—</div>
+		</div>
+	</div>
+
+	<div class="video-overlay" id="overlay-2">
+		<div class="video-label">
+			<div class="video-name">VIDEO 2</div>
+			<div class="video-hint">this HTML box should be ON TOP when background=true</div>
+			<div class="video-state" id="state-2">—</div>
+		</div>
+	</div>
+
+	<div id="log-band">
+		<div id="log-header">LOG — newest at bottom (also in browser/CDP console as [bg-test])</div>
+		<div id="log"></div>
+	</div>
+</body>
+</html>
