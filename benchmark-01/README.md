@@ -1,3 +1,0 @@
-# SignageOS Applet
-
-A digital signage applet for displaying ...
