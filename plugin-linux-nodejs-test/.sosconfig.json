@@ -1,0 +1,23 @@
+{
+	"name": "plugin-linux-nodejs-test",
+	"version": "1.0.0",
+	"description": "",
+	"platforms": {
+		"linux": {
+			"rootDir": "linux",
+			"mainFile": "index.js",
+			"runtime": "browser"
+		}
+	},
+	"configDefinition": [
+		{
+			"name": "backgroundColor",
+			"description": "backgroundColor",
+			"valueType": "string"
+		}
+	],
+	"sos": {
+		"@signageos/front-applet": "8.8.0"
+	},
+	"uid": "7428fe4b9c00e15059757ab499c21195225c"
+}

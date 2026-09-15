@@ -1,0 +1,7 @@
+{
+    "schema": [{
+        "name": "backgroundColor",
+        "description": "Background color input",
+        "valueType": "string"
+    }]
+}
