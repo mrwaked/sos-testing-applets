@@ -1,0 +1,49 @@
+{
+  "name": "@kral/iframe-browser",
+  "version": "1.0.0",
+  "author": "",
+  "main": "dist/index.html",
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "upload": "sos applet upload",
+    "clean": "npx rimraf dist",
+    "escheck": "npx es-check --module es5 dist/**/*.js",
+    "postbuild": "npm run escheck",
+    "start": "rspack serve",
+    "build": "npm run check-types && rspack build",
+    "check-types": "tsc --noEmit"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "description": "signageOS applet",
+  "repository": {},
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@rspack/cli": "^1.7.10",
+    "@rspack/core": "^1.7.10",
+    "@signageos/front-applet": "^8.5.3",
+    "@signageos/front-display": "^14.32.0",
+    "@signageos/webpack-plugin": "^1.1.1",
+    "core-js": "^3.49.0",
+    "css-loader": "^7.1.4",
+    "es-check": "^9.6.3",
+    "style-loader": "^4.0.0",
+    "typescript": "^5.9.3"
+  },
+  "sos": {
+    "appletUid": "9e6bad9bbf187c961732fa4e90e324b2614740c339599c3542",
+    "appletVersion": "1.0.0",
+    "config": [
+      {
+        "name": "url",
+        "valueType": "string",
+        "description": "URL to open in the iframe",
+        "placeholder": "https://www.signageos.io",
+        "mandatory": true
+      }
+    ]
+  }
+}
