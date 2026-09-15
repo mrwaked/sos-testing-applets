@@ -1,0 +1,25 @@
+{
+	"name": "pepik-script-get-name",
+	"version": "1.0.1",
+	"description": "",
+	"dangerLevel": "low",
+	"platforms": {
+		"default": {
+			"rootDir": "default",
+			"mainFile": "getName.js",
+			"runtime": "browser"
+		},
+		"chromeos": {
+			"rootDir": "default",
+			"mainFile": "getName.js",
+			"runtime": "browser"
+		},
+		"tizen": {
+			"rootDir": "default",
+			"mainFile": "getName.js",
+			"runtime": "browser"
+		}
+	},
+	"configDefinition": [],
+	"uid": "6696045826630e9b4902357640d06a701f6b"
+}
