@@ -1,0 +1,9 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"outDir": "dist-test",
+		"rootDir": "src",
+		"sourceMap": false
+	},
+	"include": ["src/parser.ts", "src/chart.ts"]
+}

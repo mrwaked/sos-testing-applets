@@ -1,0 +1,59 @@
+{
+  "name": "sabinovka-applet",
+  "version": "1.1.0",
+  "author": "",
+  "main": "dist/index.html",
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "upload": "sos applet upload",
+    "clean": "npx rimraf dist dist-test",
+    "escheck": "npx es-check@9.4.0 --module es5 \"./dist/**/*.js\"",
+    "postbuild": "npm run escheck",
+    "start": "rspack serve",
+    "build": "npm run check-types && rspack build",
+    "check-types": "tsc --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test test/parser.test.js test/chart.test.js",
+    "relay:dev": "npx wrangler@4 dev --config relay/wrangler.toml",
+    "relay:deploy": "npx wrangler@4 deploy --config relay/wrangler.toml"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "description": "Joke signage applet showing how many samců are v kině at klub Sabinovka, scraped via a Cloudflare Worker relay",
+  "repository": {},
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@rspack/cli": "^1.4.11",
+    "@rspack/core": "^1.4.11",
+    "@signageos/front-applet": "^8.8.0",
+    "@signageos/front-display": "^14.42.0",
+    "@signageos/webpack-plugin": "^2.0.0",
+    "core-js": "^3.50.0",
+    "css-loader": "^7.1.5",
+    "es-check": "^9.4.0",
+    "style-loader": "^4.0.0",
+    "typescript": "^5.9.3"
+  },
+  "sos": {
+    "appletUid": "af9e083262c5a6094030af81ae2a752cd7a9",
+    "appletVersion": "1.1.0",
+    "config": [
+      {
+        "name": "relayUrl",
+        "valueType": "string",
+        "description": "Base URL of the Cloudflare Worker relay (see relay/)",
+        "placeholder": "https://sabinovka-relay.example.workers.dev",
+        "mandatory": true
+      },
+      {
+        "name": "refreshSeconds",
+        "valueType": "string",
+        "description": "Polling interval in seconds (default 60, min 15)",
+        "placeholder": "60",
+        "mandatory": false
+      }
+    ]
+  }
+}

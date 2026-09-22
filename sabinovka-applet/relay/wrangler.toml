@@ -1,0 +1,13 @@
+name = "sabinovka-relay"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+workers_dev = true
+
+[observability]
+enabled = true
+
+[vars]
+PAGE_URL = "https://www.artlove.cz/aktualne-v-klubu/"
+AJAX_URL = "https://www.artlove.cz/wp-admin/admin-ajax.php"
+CHANNEL_ID = "1"
+CACHE_TTL_SECONDS = "30"

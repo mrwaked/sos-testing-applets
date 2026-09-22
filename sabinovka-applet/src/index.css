@@ -1,0 +1,222 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: #0a1a3f;
+}
+
+body {
+	font-family: "SamsungOne", "Samsung Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	color: #ffb6dc;
+	-webkit-font-smoothing: antialiased;
+}
+
+#root {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	background: #0a1a3f;
+	background: radial-gradient(ellipse at 50% 40%, #12306e 0%, #0a1a3f 55%, #050d24 100%);
+}
+
+#brand {
+	position: absolute;
+	z-index: 1;
+	top: 3vh;
+	left: 3vw;
+	font-size: 1.6vw;
+	font-weight: 700;
+	letter-spacing: 0.4em;
+	text-transform: uppercase;
+	color: rgba(255, 182, 220, 0.7);
+}
+
+#headline {
+	position: relative;
+	z-index: 1;
+	line-height: 0.9;
+	white-space: nowrap;
+}
+
+#num {
+	display: inline-block;
+	font-size: 24vw;
+	font-weight: 800;
+	color: #ff4fa8;
+	text-shadow: 0 0 40px rgba(255, 79, 168, 0.55);
+	animation: breathe 3s ease-in-out infinite alternate;
+}
+
+#noun {
+	font-size: 10.5vw;
+	font-weight: 800;
+	color: #ffb6dc;
+}
+
+#sub {
+	position: relative;
+	z-index: 1;
+	margin-top: 2vh;
+	font-size: 6vw;
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	color: #ffb6dc;
+}
+
+#foot {
+	position: absolute;
+	z-index: 1;
+	right: 0;
+	bottom: 3vh;
+	left: 0;
+	font-size: 1.8vw;
+	color: rgba(255, 182, 220, 0.6);
+}
+
+#dot {
+	display: inline-block;
+	width: 0.8vw;
+	height: 0.8vw;
+	margin-right: 0.8vw;
+	border-radius: 50%;
+	vertical-align: middle;
+	background: #ff4fa8;
+	box-shadow: 0 0 10px rgba(255, 79, 168, 0.8);
+}
+
+#dot.warn {
+	background: #ffbe4a;
+	box-shadow: 0 0 10px rgba(255, 190, 74, 0.8);
+}
+
+#dot.err {
+	background: #ff4f4f;
+	box-shadow: 0 0 10px rgba(255, 79, 79, 0.8);
+}
+
+#status.err {
+	color: #ff8a8a;
+}
+
+/* Closed or stale: dim the whole headline, stop the glow. */
+#root.closed #num {
+	color: #9fb3e6;
+	text-shadow: none;
+	animation: none;
+}
+
+#root.closed #noun,
+#root.closed #sub {
+	color: #9fb3e6;
+}
+
+.pop {
+	animation: pop 0.6s ease-out;
+}
+
+/* Background history chart: de-emphasised step line, accent dot on the current value. */
+#chart {
+	position: absolute;
+	z-index: 0;
+	left: 0;
+	right: 4vw;
+	bottom: 8vh;
+	height: 52%;
+	opacity: 0;
+	pointer-events: none;
+}
+
+#chart.has-data {
+	opacity: 1;
+}
+
+#chart svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+#chart-line {
+	fill: none;
+	stroke: rgba(255, 79, 168, 0.45);
+	stroke-width: 3px;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	vector-effect: non-scaling-stroke;
+}
+
+#chart-dot {
+	position: absolute;
+	display: none;
+	width: 1.1vw;
+	height: 1.1vw;
+	margin: -0.55vw 0 0 -0.55vw;
+	border-radius: 50%;
+	background: #ff4fa8;
+	box-shadow: 0 0 18px rgba(255, 79, 168, 0.9);
+}
+
+#chart.has-data #chart-dot {
+	display: block;
+}
+
+#chart.redraw {
+	animation: chart-in 0.9s ease-out;
+}
+
+#root.closed #chart-line {
+	stroke: rgba(159, 179, 230, 0.35);
+}
+
+#root.closed #chart-area {
+	opacity: 0.5;
+}
+
+#root.closed #chart-dot {
+	background: #9fb3e6;
+	box-shadow: none;
+}
+
+@keyframes chart-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes breathe {
+	from {
+		text-shadow: 0 0 30px rgba(255, 79, 168, 0.35);
+	}
+	to {
+		text-shadow: 0 0 70px rgba(255, 79, 168, 0.85);
+	}
+}
+
+@keyframes pop {
+	0% {
+		transform: scale(1);
+	}
+	40% {
+		transform: scale(1.12);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
