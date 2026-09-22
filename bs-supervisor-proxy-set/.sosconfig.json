@@ -1,0 +1,56 @@
+{
+	"name": "bs-supervisor-proxy-set",
+	"version": "1.1.0",
+	"description": "Set or disable the device HTTP proxy and bypass list on a BrightSign supervisor and report the state before and after.",
+	"dangerLevel": "high",
+	"platforms": {
+		"brightsign": {
+			"rootDir": "brightsign",
+			"mainFile": "setProxy.js",
+			"runtime": "nodejs"
+		}
+	},
+	"configDefinition": [
+		{
+			"name": "action",
+			"valueType": "enum",
+			"mandatory": true,
+			"description": "enable — configure the proxy from the values below; disable — clear it",
+			"list": [
+				"enable",
+				"disable"
+			]
+		},
+		{
+			"name": "uri",
+			"valueType": "string",
+			"mandatory": false,
+			"description": "Proxy host or IP, e.g. 192.168.1.22 (required when action=enable)"
+		},
+		{
+			"name": "port",
+			"valueType": "string",
+			"mandatory": false,
+			"description": "Proxy port, e.g. 3128 (required when action=enable)"
+		},
+		{
+			"name": "username",
+			"valueType": "string",
+			"mandatory": false,
+			"description": "Proxy username, leave empty for an unauthenticated proxy"
+		},
+		{
+			"name": "password",
+			"valueType": "string",
+			"mandatory": false,
+			"description": "Proxy password, leave empty for an unauthenticated proxy"
+		},
+		{
+			"name": "bypassList",
+			"valueType": "string",
+			"mandatory": false,
+			"description": "Comma-separated hosts to exempt from the proxy, e.g. example.com,*.corp.example — cleared when action=disable"
+		}
+	],
+	"uid": "5f661626f9e34a029c9b7112a565f869fe05"
+}
