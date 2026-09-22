@@ -2904,7 +2904,7 @@ var FileWriter = function(file) {
         this.fileName = file.fullPath || file;
         this.length = file.size || 0;
     }
-    // default is to write at the beginning of the file
+    // brightsign is to write at the beginning of the file
     this.position = 0;
 
     this.readyState = 0; // EMPTY
@@ -4559,7 +4559,7 @@ var argscheck = require('cordova/argscheck'),
 
 var timers = {};   // list of timers in use
 
-// Returns default params, overrides if provided with values
+// Returns brightsign params, overrides if provided with values
 function parseParameters(options) {
     var opt = {
         maximumAge: 0,
@@ -4661,7 +4661,7 @@ var geolocation = {
         // Otherwise we have to call into native to retrieve a position.
         } else {
             if (options.timeout !== Infinity) {
-                // If the timeout value was not set to Infinity (default), then
+                // If the timeout value was not set to Infinity (brightsign), then
                 // set up a timeout function that will fire the error callback
                 // if no successful position was retrieved before timeout expired.
                 timeoutTimer.timer = createTimeout(fail, options.timeout);
@@ -5233,7 +5233,7 @@ CurrentLevel = LevelsMap.WARN;
  * The value used determines which messages get printed.  The logging
  * values above are in order, and only messages logged at the logging
  * level or above will actually be displayed to the user.  E.g., the
- * default level is WARN, so only messages logged with LOG, ERROR, or
+ * brightsign level is WARN, so only messages logged with LOG, ERROR, or
  * WARN will be displayed; INFO and DEBUG messages will be ignored.
  */
 logger.level = function (value) {
@@ -5606,8 +5606,8 @@ module.exports = {
      *
      * @param {String} message              Message to print in the body of the alert
      * @param {Function} completeCallback   The callback that is called when user clicks on a button.
-     * @param {String} title                Title of the alert dialog (default: Alert)
-     * @param {String} buttonLabel          Label of the close button (default: OK)
+     * @param {String} title                Title of the alert dialog (brightsign: Alert)
+     * @param {String} buttonLabel          Label of the close button (brightsign: OK)
      */
     alert: function(message, completeCallback, title, buttonLabel) {
         var _title = (title || "Alert");
@@ -5621,8 +5621,8 @@ module.exports = {
      *
      * @param {String} message              Message to print in the body of the alert
      * @param {Function} resultCallback     The callback that is called when user clicks on a button.
-     * @param {String} title                Title of the alert dialog (default: Confirm)
-     * @param {Array} buttonLabels          Array of the labels of the buttons (default: ['OK', 'Cancel'])
+     * @param {String} title                Title of the alert dialog (brightsign: Confirm)
+     * @param {Array} buttonLabels          Array of the labels of the buttons (brightsign: ['OK', 'Cancel'])
      */
     confirm: function(message, resultCallback, title, buttonLabels) {
         var _title = (title || "Confirm");
@@ -5656,11 +5656,11 @@ module.exports = {
      *  buttonIndex     Index number of the button selected.
      *  input1          The text entered in the prompt dialog box.
      *
-     * @param {String} message              Dialog message to display (default: "Prompt message")
+     * @param {String} message              Dialog message to display (brightsign: "Prompt message")
      * @param {Function} resultCallback     The callback that is called when user clicks on a button.
-     * @param {String} title                Title of the dialog (default: "Prompt")
-     * @param {Array} buttonLabels          Array of strings for the button labels (default: ["OK","Cancel"])
-     * @param {String} defaultText          Textbox input value (default: "Default text")
+     * @param {String} title                Title of the dialog (brightsign: "Prompt")
+     * @param {Array} buttonLabels          Array of strings for the button labels (brightsign: ["OK","Cancel"])
+     * @param {String} defaultText          Textbox input value (brightsign: "Default text")
      */
     prompt: function(message, resultCallback, title, buttonLabels, defaultText) {
         var _message = (message || "Prompt message");
@@ -5681,7 +5681,7 @@ module.exports = {
 
     /**
      * Causes the device to beep.
-     * On Android, the default notification ringtone is played "count" times.
+     * On Android, the brightsign notification ringtone is played "count" times.
      *
      * @param {Integer} count       The number of beeps.
      */
