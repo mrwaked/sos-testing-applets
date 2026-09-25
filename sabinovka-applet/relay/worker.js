@@ -2,6 +2,7 @@
 // Flow: page -> checksum, maintenance -> wc_auth cookie, messages -> { nowTime, fetchedAt, messages[] }.
 
 const COOKIE_MAX_AGE_MS = 13 * 24 * 3600e3;
+const KV_KEY = 'trimmed';
 const USER_AGENT =
 	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36';
 const UPSTREAM_HEADERS = {
@@ -11,7 +12,7 @@ const UPSTREAM_HEADERS = {
 	Referer: 'https://www.artlove.cz/aktualne-v-klubu/',
 };
 
-// Isolate-lifetime state; a cold start simply re-authenticates.
+// Isolate-lifetime state; a cold start re-authenticates, the message cache also lives in KV.
 const state = {
 	checksum: null,
 	cookie: null,
@@ -54,14 +55,24 @@ export default {
 	},
 };
 
+// Memory first, then the KV namespace shared by all isolates, then upstream.
 async function getTrimmed(env, ttlMs) {
 	if (state.cache && Date.now() - state.cacheAt < ttlMs) {
+		return state.cache;
+	}
+	const stored = await env.CACHE.get(KV_KEY, 'json');
+	if (stored && Date.now() - stored.cachedAt < ttlMs) {
+		state.cache = stored.body;
+		state.cacheAt = stored.cachedAt;
 		return state.cache;
 	}
 	const upstream = await fetchMessagesWithRetry(env);
 	state.cache = trim(upstream);
 	state.cacheAt = Date.now();
 	state.lastError = null;
+	await env.CACHE.put(KV_KEY, JSON.stringify({ cachedAt: state.cacheAt, body: state.cache }), {
+		expirationTtl: Math.max(60, Math.ceil(ttlMs / 1000)),
+	});
 	return state.cache;
 }
 

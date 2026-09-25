@@ -23,6 +23,11 @@ export default defineConfig({
 				use: ['style-loader', 'css-loader'],
 			},
 			{
+				test: /\.mp3$/,
+				type: 'asset/resource',
+				generator: { filename: '[name][ext]' },
+			},
+			{
 				test: /\.(tsx?|js)$/,
 				loader: 'builtin:swc-loader',
 				options: {

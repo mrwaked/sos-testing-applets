@@ -175,3 +175,114 @@ export function formatHHMM(ms: number): string {
 function pad2(value: number): string {
 	return (value < 10 ? '0' : '') + value;
 }
+
+/** Newest message posted on the same local calendar day as `nowMs`, or null. */
+export function latestMessageOfDay(messages: ChatMessage[], nowMs: number): ChatMessage | null {
+	let best: ChatMessage | null = null;
+	let bestMs = -Infinity;
+	for (const message of messages) {
+		const ms = parseIsoUtc(message.time);
+		if (ms === null || ms > nowMs || ms <= bestMs || !isSameLocalDay(ms, nowMs)) {
+			continue;
+		}
+		best = message;
+		bestMs = ms;
+	}
+	return best;
+}
+
+export function isSameLocalDay(a: number, b: number): boolean {
+	const da = new Date(a);
+	const db = new Date(b);
+	return da.getFullYear() === db.getFullYear() && da.getMonth() === db.getMonth() && da.getDate() === db.getDate();
+}
+
+export function displayText(text: string, maxLength: number): string {
+	const clean = normalizeText(text);
+	if (clean.length <= maxLength) {
+		return clean;
+	}
+	return clean.slice(0, maxLength - 1).replace(/\s+$/, '') + '…';
+}
+
+export interface GirlsStatus {
+	present: boolean;
+	count: number | null;
+}
+
+const GIRLS_RE = /slečn|holk|dívk/i;
+const GIRLS_COUNT_RE = /(\d+)\s*(?:slečn|holk|dívk)/i;
+const OPENING_HOURS_RE = /\bod\s+(\d{1,2})(?:[:.](\d{2}))?\s*(?:hodin|hod\.?|h)(?![a-záčďéěíňóřšťúůýž])/i;
+const OPENING_CLOCK_RE = /\bod\s+(\d{1,2}):(\d{2})/i;
+
+/** Whether the newest status-bearing message says girls are present; a closing note always means no. */
+export function girlsStatus(messages: ChatMessage[], nowMs: number): GirlsStatus {
+	let latest: { ms: number; text: string; kind: Kind } | null = null;
+	for (const message of messages) {
+		const ms = parseIsoUtc(message.time);
+		if (ms === null || ms > nowMs) {
+			continue;
+		}
+		const cls = classify(message.text);
+		if (cls.kind === 'none') {
+			continue;
+		}
+		if (!latest || ms > latest.ms) {
+			latest = { ms, text: normalizeText(message.text), kind: cls.kind };
+		}
+	}
+	if (!latest || latest.kind === 'closed' || !GIRLS_RE.test(latest.text)) {
+		return { present: false, count: null };
+	}
+	const counted = GIRLS_COUNT_RE.exec(latest.text);
+	return { present: true, count: counted && counted[1] ? parseInt(counted[1], 10) : null };
+}
+
+export function slecnyNoun(count: number | null): string {
+	if (count === 1) {
+		return 'slečna';
+	}
+	if (count === null || (count >= 2 && count <= 4)) {
+		return 'slečny';
+	}
+	return 'slečen';
+}
+
+/** Opening time ("od 12 hodin", "od 10:30") from the newest message that states one, as HH:MM. */
+export function parseOpeningTime(messages: ChatMessage[], nowMs: number): string | null {
+	let best: { ms: number; value: string } | null = null;
+	for (const message of messages) {
+		const ms = parseIsoUtc(message.time);
+		if (ms === null || ms > nowMs) {
+			continue;
+		}
+		const text = normalizeText(message.text);
+		const match = OPENING_HOURS_RE.exec(text) || OPENING_CLOCK_RE.exec(text);
+		if (!match || !match[1]) {
+			continue;
+		}
+		const hours = parseInt(match[1], 10);
+		const minutes = match[2] ? parseInt(match[2], 10) : 0;
+		if (hours > 23 || minutes > 59) {
+			continue;
+		}
+		if (!best || ms > best.ms) {
+			best = { ms, value: pad2(hours) + ':' + pad2(minutes) };
+		}
+	}
+	return best ? best.value : null;
+}
+
+/** Elapsed time in Czech without the preposition: "chvilkou", "12 min", "2 h 5 min", "3 h". */
+export function formatRelative(deltaMs: number): string {
+	const minutes = Math.floor(Math.max(deltaMs, 0) / 60000);
+	if (minutes < 1) {
+		return 'chvilkou';
+	}
+	if (minutes < 60) {
+		return minutes + ' min';
+	}
+	const hours = Math.floor(minutes / 60);
+	const rest = minutes % 60;
+	return rest === 0 ? hours + ' h' : hours + ' h ' + rest + ' min';
+}

@@ -1,6 +1,6 @@
 // Pure geometry for the background history chart; no DOM so it runs under node:test.
 import type { ChatMessage } from './parser';
-import { classify, parseIsoUtc } from './parser';
+import { classify, isSameLocalDay, parseIsoUtc } from './parser';
 
 export interface SeriesPoint {
 	ms: number;
@@ -99,4 +99,32 @@ export function stepPaths(points: SeriesPoint[]): ChartGeometry | null {
 
 function round1(value: number): number {
 	return Math.round(value * 10) / 10;
+}
+
+export interface Trend {
+	delta: number;
+	fromMs: number;
+	toMs: number;
+}
+
+/** Change between the last two reports; the terminal "now" point is skipped. */
+export function seriesTrend(points: SeriesPoint[]): Trend | null {
+	const current = points[points.length - 2];
+	const previous = points[points.length - 3];
+	if (!current || !previous) {
+		return null;
+	}
+	return { delta: current.count - previous.count, fromMs: previous.ms, toMs: current.ms };
+}
+
+/** Highest reported count on the local day of `nowMs`, ignoring the terminal point. */
+export function seriesDayMax(points: SeriesPoint[], nowMs: number): number {
+	let max = 0;
+	for (let i = 0; i < points.length - 1; i++) {
+		const p = points[i];
+		if (p && p.count > max && isSameLocalDay(p.ms, nowMs)) {
+			max = p.count;
+		}
+	}
+	return max;
 }

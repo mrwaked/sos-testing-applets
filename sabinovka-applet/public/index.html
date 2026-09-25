@@ -8,6 +8,10 @@
 </head>
 <body>
 	<div id="root">
+		<div id="night" aria-hidden="true">
+			<div id="stars"></div>
+			<div id="moon"></div>
+		</div>
 		<div id="chart" aria-hidden="true">
 			<svg viewBox="0 0 1000 300" preserveAspectRatio="none">
 				<defs>
@@ -22,9 +26,17 @@
 			<span id="chart-dot"></span>
 		</div>
 		<div id="brand">Sabinovka · živě z kina</div>
+		<div id="fanfare"></div>
+		<div id="pills">
+			<span id="trend" class="pill"><i id="trend-arrow"></i><span id="trend-text"></span></span>
+			<span id="girls" class="pill"><i id="girls-heart"></i><span id="girls-text"></span></span>
+		</div>
 		<div id="headline"><span id="num">…</span> <span id="noun">samců</span></div>
 		<div id="sub">v kině</div>
+		<div id="chat"><span id="chat-time"></span><span id="chat-text"></span></div>
+		<div id="mood"></div>
 		<div id="foot"><span id="dot"></span><span id="status">načítám samce…</span></div>
+		<div id="fx" aria-hidden="true"></div>
 	</div>
 </body>
 </html>

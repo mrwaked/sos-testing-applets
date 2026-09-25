@@ -65,3 +65,23 @@ test('stepPaths: all zeros gives a flat baseline, single point spans at least an
 	assert.ok(single.line.indexOf('M833.3 ') === 0, 'ten minutes inside a one-hour window');
 	assert.equal(stepPaths([]), null);
 });
+
+test('seriesTrend: delta between the last two reports, terminal point skipped', () => {
+	const { seriesTrend } = require('../dist-test/chart.js');
+	const full = seriesTrend(buildSeries(fixture.messages, NOW, 10));
+	assert.deepEqual(full, { delta: 4, fromMs: utc('2026-09-16T11:19:52+00:00'), toMs: utc('2026-09-16T11:47:17+00:00') });
+	const upToOpen = fixture.messages.filter((m) => utc(m.time) <= utc('2026-09-16T09:58:17+00:00'));
+	assert.equal(seriesTrend(buildSeries(upToOpen, utc('2026-09-16T10:00:00+00:00'), 0)).delta, 0, 'closed 0 -> open 0');
+	const drop = fixture.messages.filter((m) => utc(m.time) <= utc('2026-09-15T16:26:50+00:00'));
+	assert.equal(seriesTrend(buildSeries(drop, utc('2026-09-15T16:30:00+00:00'), 7)).delta, -4, '11 -> 7');
+	assert.equal(seriesTrend(buildSeries([fixture.messages[0]], NOW, 10)), null, 'single report has no trend');
+	assert.equal(seriesTrend([]), null);
+});
+
+test('seriesDayMax: highest count of the current local day only', () => {
+	const { seriesDayMax } = require('../dist-test/chart.js');
+	assert.equal(seriesDayMax(buildSeries(fixture.messages, NOW, 10), NOW), 10, "yesterday's 15 is not today's record");
+	const yesterdayEvening = utc('2026-09-15T21:30:00+00:00');
+	assert.equal(seriesDayMax(buildSeries(fixture.messages, yesterdayEvening, 0), yesterdayEvening), 15);
+	assert.equal(seriesDayMax([], NOW), 0);
+});

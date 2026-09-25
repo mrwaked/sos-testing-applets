@@ -1,6 +1,6 @@
 {
   "name": "sabinovka-applet",
-  "version": "1.1.0",
+  "version": "1.4.2",
   "author": "",
   "main": "dist/index.html",
   "scripts": {
@@ -12,7 +12,7 @@
     "start": "rspack serve",
     "build": "npm run check-types && rspack build",
     "check-types": "tsc --noEmit",
-    "test": "tsc -p tsconfig.test.json && node --test test/parser.test.js test/chart.test.js",
+    "test": "tsc -p tsconfig.test.json && TZ=Europe/Prague node --test test/parser.test.js test/chart.test.js",
     "relay:dev": "npx wrangler@4 dev --config relay/wrangler.toml",
     "relay:deploy": "npx wrangler@4 deploy --config relay/wrangler.toml"
   },
@@ -38,7 +38,7 @@
   },
   "sos": {
     "appletUid": "af9e083262c5a6094030af81ae2a752cd7a9",
-    "appletVersion": "1.1.0",
+    "appletVersion": "1.4.2",
     "config": [
       {
         "name": "relayUrl",
@@ -52,6 +52,13 @@
         "valueType": "string",
         "description": "Polling interval in seconds (default 60, min 15)",
         "placeholder": "60",
+        "mandatory": false
+      },
+      {
+        "name": "staleHours",
+        "valueType": "string",
+        "description": "Hours without a report after which the cinema is shown as closed (default 4)",
+        "placeholder": "4",
         "mandatory": false
       }
     ]

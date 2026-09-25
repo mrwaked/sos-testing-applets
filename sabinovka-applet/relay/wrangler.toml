@@ -10,4 +10,8 @@ enabled = true
 PAGE_URL = "https://www.artlove.cz/aktualne-v-klubu/"
 AJAX_URL = "https://www.artlove.cz/wp-admin/admin-ajax.php"
 CHANNEL_ID = "1"
-CACHE_TTL_SECONDS = "30"
+CACHE_TTL_SECONDS = "300"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "ebf9da4043054f50b3eccb74ee827e77"

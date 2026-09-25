@@ -151,3 +151,64 @@ test('formatHHMM: zero-padded HH:MM', () => {
 	const nineOhFive = new Date(2026, 0, 1, 9, 5).getTime();
 	assert.equal(formatHHMM(nineOhFive), '09:05');
 });
+
+test('latestMessageOfDay: newest message of the current local day only (TZ pinned to Europe/Prague)', () => {
+	assert.equal(process.env.TZ, 'Europe/Prague');
+	const today = require('../dist-test/parser.js').latestMessageOfDay(fixture.messages, utc(fixture.nowTime));
+	assert.equal(today.time, '2026-09-16T11:47:17+00:00');
+	const lateYesterday = require('../dist-test/parser.js').latestMessageOfDay(fixture.messages, utc('2026-09-15T21:30:00+00:00'));
+	assert.equal(lateYesterday.time, '2026-09-15T21:23:18+00:00', '23:23 local is still the 15th');
+	const afterMidnight = require('../dist-test/parser.js').latestMessageOfDay(fixture.messages, utc('2026-09-15T22:30:00+00:00'));
+	assert.equal(afterMidnight, null, '00:30 local on the 16th has no messages yet');
+	assert.equal(require('../dist-test/parser.js').latestMessageOfDay(fixture.messages, utc('2026-09-17T10:00:00+00:00')), null);
+	assert.equal(require('../dist-test/parser.js').latestMessageOfDay([], utc(fixture.nowTime)), null);
+});
+
+test('displayText: strips tags and nbsp, truncates long text with an ellipsis', () => {
+	const { displayText } = require('../dist-test/parser.js');
+	assert.equal(displayText('V kině 10 samců [emoticon custom="16"]', 90), 'V kině 10 samců');
+	assert.equal(displayText('v kině 6 samců mix Poppersy 54 druhů od 250,300,350,400 kč......a jiné dobroty', 40), 'v kině 6 samců mix Poppersy 54 druhů od…');
+	assert.ok(displayText(fixture.messages[0].text, 90).length <= 90);
+	assert.equal(displayText('', 90), '');
+});
+
+test('girlsStatus: follows the newest status-bearing message, closing means no', () => {
+	const { girlsStatus } = require('../dist-test/parser.js');
+	assert.deepEqual(girlsStatus(fixture.messages, utc(fixture.nowTime)), { present: false, count: null });
+	assert.deepEqual(girlsStatus(upTo('2026-09-15T20:04:21+00:00'), utc('2026-09-15T20:10:00+00:00')), { present: true, count: null });
+	assert.deepEqual(girlsStatus(upTo('2026-09-15T20:54:57+00:00'), utc('2026-09-15T21:00:00+00:00')), { present: false, count: null }, '"už jen samci" ends it');
+	assert.deepEqual(girlsStatus(upTo('2026-09-15T21:23:18+00:00'), utc('2026-09-15T21:30:00+00:00')), { present: false, count: null }, 'closing note');
+	const counted = [{ time: '2026-09-16T10:00:00+00:00', text: 'v kině 5 samců a 2 slečny [emoticon custom="1"]' }];
+	assert.deepEqual(girlsStatus(counted, utc('2026-09-16T10:05:00+00:00')), { present: true, count: 2 });
+	assert.deepEqual(girlsStatus([], utc(fixture.nowTime)), { present: false, count: null });
+});
+
+test('slecnyNoun: Czech declension', () => {
+	const { slecnyNoun } = require('../dist-test/parser.js');
+	assert.equal(slecnyNoun(1), 'slečna');
+	assert.equal(slecnyNoun(2), 'slečny');
+	assert.equal(slecnyNoun(4), 'slečny');
+	assert.equal(slecnyNoun(5), 'slečen');
+	assert.equal(slecnyNoun(null), 'slečny');
+});
+
+test('parseOpeningTime: "od 12 hodin" and "od 10:30" forms, prices ignored', () => {
+	const { parseOpeningTime } = require('../dist-test/parser.js');
+	assert.equal(parseOpeningTime(fixture.messages, utc(fixture.nowTime)), '12:00');
+	const clock = [{ time: '2026-09-16T08:00:00+00:00', text: 'Dnes otevřeno od 10:30 [emoticon custom="2"]' }];
+	assert.equal(parseOpeningTime(clock, utc('2026-09-16T09:00:00+00:00')), '10:30');
+	const hod = [{ time: '2026-09-16T08:00:00+00:00', text: 'těšíme se na vás od 9 hod.' }];
+	assert.equal(parseOpeningTime(hod, utc('2026-09-16T09:00:00+00:00')), '09:00');
+	const prices = [{ time: '2026-09-16T08:00:00+00:00', text: 'Poppersy 54 druhů od 250,300,350,400 kč a od 5 hlavních značek' }];
+	assert.equal(parseOpeningTime(prices, utc('2026-09-16T09:00:00+00:00')), null);
+	assert.equal(parseOpeningTime([], utc(fixture.nowTime)), null);
+});
+
+test('formatRelative: Czech elapsed time without the preposition', () => {
+	const { formatRelative } = require('../dist-test/parser.js');
+	assert.equal(formatRelative(30e3), 'chvilkou');
+	assert.equal(formatRelative(12 * 60e3), '12 min');
+	assert.equal(formatRelative(125 * 60e3), '2 h 5 min');
+	assert.equal(formatRelative(180 * 60e3), '3 h');
+	assert.equal(formatRelative(-5000), 'chvilkou');
+});

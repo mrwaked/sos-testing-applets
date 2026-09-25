@@ -41,6 +41,99 @@ body {
 	color: rgba(255, 182, 220, 0.7);
 }
 
+#pills {
+	position: relative;
+	z-index: 1;
+	min-height: 3.4vw;
+	margin-bottom: 1.5vh;
+	font-size: 2.1vw;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.pill {
+	display: none;
+	margin: 0 0.6vw;
+	padding: 0.55vw 1.5vw;
+	border: 1px solid rgba(255, 182, 220, 0.35);
+	border-radius: 999px;
+	vertical-align: middle;
+	color: #ffb6dc;
+	background: rgba(255, 79, 168, 0.1);
+}
+
+.pill.show {
+	display: inline-block;
+	animation: fade-in 0.6s ease-out;
+}
+
+#trend.up {
+	color: #ff4fa8;
+	border-color: rgba(255, 79, 168, 0.6);
+}
+
+#trend.down {
+	color: #9fb3e6;
+	border-color: rgba(159, 179, 230, 0.6);
+	background: rgba(159, 179, 230, 0.1);
+}
+
+#trend-arrow {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-right: 0.8vw;
+	border-right: 0.7vw solid transparent;
+	border-left: 0.7vw solid transparent;
+	vertical-align: middle;
+}
+
+#trend.up #trend-arrow {
+	border-bottom: 1.1vw solid #ff4fa8;
+}
+
+#trend.down #trend-arrow {
+	border-top: 1.1vw solid #9fb3e6;
+}
+
+#trend.flat #trend-arrow {
+	width: 1.4vw;
+	height: 0.3vw;
+	border: 0;
+	background: rgba(255, 182, 220, 0.6);
+}
+
+#girls-heart {
+	position: relative;
+	display: inline-block;
+	width: 1.1vw;
+	height: 1.1vw;
+	margin: 0 1vw 0 0.3vw;
+	vertical-align: middle;
+	background: #ff4fa8;
+	transform: rotate(-45deg);
+}
+
+#girls-heart:before,
+#girls-heart:after {
+	content: "";
+	position: absolute;
+	width: 1.1vw;
+	height: 1.1vw;
+	border-radius: 50%;
+	background: #ff4fa8;
+}
+
+#girls-heart:before {
+	top: -0.55vw;
+	left: 0;
+}
+
+#girls-heart:after {
+	top: 0;
+	left: 0.55vw;
+}
+
 #headline {
 	position: relative;
 	z-index: 1;
@@ -71,6 +164,51 @@ body {
 	font-weight: 600;
 	letter-spacing: 0.05em;
 	color: #ffb6dc;
+}
+
+#chat {
+	position: relative;
+	z-index: 1;
+	max-width: 84vw;
+	min-height: 1.3em;
+	margin-top: 2.5vh;
+	overflow: hidden;
+	font-size: 2.2vw;
+	font-weight: 500;
+	color: rgba(255, 182, 220, 0.75);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	visibility: hidden;
+	opacity: 0;
+}
+
+#chat.show {
+	visibility: visible;
+	opacity: 1;
+	animation: fade-in 0.9s ease-out;
+}
+
+#chat-time {
+	color: rgba(255, 182, 220, 0.5);
+}
+
+#mood {
+	position: relative;
+	z-index: 1;
+	display: none;
+	min-height: 1.3em;
+	margin-top: 2.5vh;
+	font-size: 2.2vw;
+	font-weight: 500;
+	color: rgba(159, 179, 230, 0.85);
+}
+
+#root.closed #mood {
+	display: block;
+}
+
+#root.closed #chat {
+	display: none;
 }
 
 #foot {
@@ -175,7 +313,7 @@ body {
 }
 
 #chart.redraw {
-	animation: chart-in 0.9s ease-out;
+	animation: fade-in 0.9s ease-out;
 }
 
 #root.closed #chart-line {
@@ -191,12 +329,206 @@ body {
 	box-shadow: none;
 }
 
-@keyframes chart-in {
+@keyframes fade-in {
 	from {
 		opacity: 0;
 	}
 	to {
 		opacity: 1;
+	}
+}
+
+/* Night mood: star field and moon, visible only while closed or stale. */
+#night {
+	position: absolute;
+	z-index: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: none;
+	overflow: hidden;
+}
+
+#root.closed #night {
+	display: block;
+}
+
+#stars {
+	position: absolute;
+	top: -10%;
+	left: -10%;
+	width: 120%;
+	height: 120%;
+	animation: drift 180s ease-in-out infinite alternate;
+}
+
+.star {
+	position: absolute;
+	border-radius: 50%;
+	background: #fff;
+	animation: twinkle 3s ease-in-out infinite alternate;
+}
+
+#moon {
+	position: absolute;
+	top: 12vh;
+	right: 10vw;
+	width: 7vw;
+	height: 7vw;
+	border-radius: 50%;
+	background: #e9ecff;
+	box-shadow: inset -1.6vw 1.2vw 0 0 #0d1f4a, 0 0 60px rgba(233, 236, 255, 0.35);
+}
+
+/* Fanfare: record label, number flash, confetti layer. */
+#fanfare {
+	position: absolute;
+	z-index: 2;
+	top: 7vh;
+	right: 0;
+	left: 0;
+	font-size: 2.6vw;
+	line-height: 1;
+	font-weight: 800;
+	letter-spacing: 0.35em;
+	text-transform: uppercase;
+	color: #fff;
+	text-shadow: 0 0 30px rgba(255, 79, 168, 0.9);
+	opacity: 0;
+}
+
+#fanfare.show {
+	animation: fanfare-in 15s ease-out;
+}
+
+#num.flash {
+	animation: flash 15s ease-out;
+}
+
+#num.changed {
+	animation: changed 15s ease-out;
+}
+
+#fx {
+	position: absolute;
+	z-index: 3;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.confetti {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 2px;
+}
+
+@keyframes twinkle {
+	from {
+		opacity: 0.15;
+	}
+	to {
+		opacity: 0.85;
+	}
+}
+
+@keyframes drift {
+	from {
+		transform: translate(0, 0);
+	}
+	to {
+		transform: translate(4%, 2%);
+	}
+}
+
+@keyframes fanfare-in {
+	0% {
+		opacity: 0;
+		transform: scale(0.6);
+	}
+	3% {
+		opacity: 1;
+		transform: scale(1.05);
+	}
+	5% {
+		transform: scale(1);
+	}
+	92% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+/* Record: big flash, then the glow keeps pulsing for the rest of the 15 s. */
+@keyframes flash {
+	0% {
+		transform: scale(1);
+		text-shadow: 0 0 40px rgba(255, 79, 168, 0.55);
+	}
+	3% {
+		transform: scale(1.18);
+		text-shadow: 0 0 40px #fff, 0 0 120px rgba(255, 79, 168, 1);
+	}
+	8% {
+		transform: scale(1);
+		text-shadow: 0 0 60px rgba(255, 79, 168, 0.9);
+	}
+	20% {
+		text-shadow: 0 0 40px #fff, 0 0 120px rgba(255, 79, 168, 1);
+	}
+	32% {
+		text-shadow: 0 0 60px rgba(255, 79, 168, 0.9);
+	}
+	44% {
+		text-shadow: 0 0 40px #fff, 0 0 120px rgba(255, 79, 168, 1);
+	}
+	56% {
+		text-shadow: 0 0 60px rgba(255, 79, 168, 0.9);
+	}
+	68% {
+		text-shadow: 0 0 40px #fff, 0 0 120px rgba(255, 79, 168, 1);
+	}
+	80% {
+		text-shadow: 0 0 60px rgba(255, 79, 168, 0.9);
+	}
+	100% {
+		transform: scale(1);
+		text-shadow: 0 0 40px rgba(255, 79, 168, 0.55);
+	}
+}
+
+/* Ordinary change: quick pop, then a softer pulse that fades back to idle over 15 s. */
+@keyframes changed {
+	0% {
+		transform: scale(1);
+		text-shadow: 0 0 40px rgba(255, 79, 168, 0.55);
+	}
+	4% {
+		transform: scale(1.1);
+		text-shadow: 0 0 60px rgba(255, 255, 255, 0.8), 0 0 110px rgba(255, 79, 168, 1);
+	}
+	8% {
+		transform: scale(1);
+		text-shadow: 0 0 60px rgba(255, 79, 168, 0.95);
+	}
+	30% {
+		text-shadow: 0 0 80px rgba(255, 255, 255, 0.5), 0 0 110px rgba(255, 79, 168, 1);
+	}
+	52% {
+		text-shadow: 0 0 60px rgba(255, 79, 168, 0.9);
+	}
+	74% {
+		text-shadow: 0 0 80px rgba(255, 255, 255, 0.35), 0 0 100px rgba(255, 79, 168, 0.9);
+	}
+	100% {
+		text-shadow: 0 0 40px rgba(255, 79, 168, 0.55);
 	}
 }
 
